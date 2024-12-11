@@ -1,0 +1,15 @@
+Os dados são analisados por uma predição importada pela biblioteca *sklearn* e *tensorflow* para o treinamento da máquina:
+
+_Foram utilizadas outras bibliotecas mais comuns como: para fazer os cálculos (numpy), para manipulação de dados (pandas) e para plotagem de gráficos após a análise (matplotlib)._
+
+    import tensorflow as tf
+    from sklearn.preprocessing import MinMaxScaler
+    from sklearn.model_selection import train_test_split
+    import matplotlib.pyplot as plt
+
+Fazemos alguns ajustes aos dados para que o modelo possa trabalhar sem dificuldades. Utilizamos algumas funções de pré-processamento, para limpeza desses dados: 
+
+    df['timestamp'] = df['DataHora'].apply(lambda x: x.timestamp())
+
+# Conversão de DataHora para *timestamp*.
+# Normalização dos dados com *MinMaxScaler* para que todos os valores fiquem na mesma escala.
