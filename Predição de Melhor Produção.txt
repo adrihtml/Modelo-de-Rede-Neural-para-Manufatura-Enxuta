@@ -1,0 +1,137 @@
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+
+#Dados históricos (você pode ajustar para seus dados reais)
+
+data = {
+    "DataHora": pd.date_range(start="2030-05-01 00:00", periods=000, freq='H'),  # dados da máquina que gostaria de predir
+    "BR CUR ELEC": np.random.randint(000, 000, size=000),  # Simulação de consumo de energia
+    "Temperatura externa": np.random.randint(000, 000, size=000),  # Simulação de temperatura
+    "Taxa de Produção": np.random.uniform(000, 000, size=000),  # Simulação de taxa de produção
+    "Eficiência da Máquina": np.random.uniform(000, 000, size=000),  # Simulação de eficiência das máquinas
+    "Meta": [000] * 000  # Meta de Produção (ajustar conforme necessário)
+}
+
+df = pd.DataFrame(data)
+
+#Pré-processamento
+df['timestamp'] = df['DataHora'].apply(lambda x: x.timestamp())
+
+# Definir parâmetros
+X = df[['timestamp', 'SUSBTITUA AQUI PELOS DADOS INTERESSADOS', 'Temperatura externa', 'Taxa de Produção', 'Eficiência da Máquina']].values
+y = df['Meta'].values
+
+scaler = MinMaxScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Dividir os dados em treino e teste
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+# Passo 3: Definir a rede neural
+model = tf.keras.Sequential([
+    tf.keras.layers.InputLayer(input_shape=(X_train.shape[1],)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(32, activation='relu'),
+    tf.keras.layers.Dense(1)  # Saída única (previsão do valor próximo da meta)
+])
+
+model.compile(optimizer='adam', loss='mse')
+
+# Treinar o modelo
+history = model.fit(X_train, y_train, epochs=100, verbose=0)
+
+# Passo 4: Predizer para os próximos 00 horas
+# Gerar timestamps para as próximas 00 horas
+future_dates = pd.date_range(start=df['DataHora'].max() + pd.Timedelta(hours=1), periods=SUBSTITUIR PELA HORA DA PREDIÇÃO, freq='H')
+future_timestamps = future_dates.map(lambda x: x.timestamp())
+
+# Simular valores de consumo e temperatura para as próximas horas
+# Substitua pelos valores indicados para sua predição
+future_energy = np.random.randint(000, 000, size=00)
+future_temp = np.random.randint(0, 00, size=00)  # Simulação com temperaturas mais baixas
+future_prod_rate = np.random.uniform(0, 00, size=00)   # Simulação para Taxa de Produção
+future_machine_eff = np.random.uniform(0, 00, size=00)   # Simulação para Eficiência das Máquinas
+
+# Criar o DataFrame para o futuro
+future_data = {
+    'timestamp': future_timestamps,
+    'SUSBTITUA AQUI PELOS DADOS INTERESSADOS': future_energy,
+    'Temperatura externa': future_temp,
+    'Taxa de Produção': future_prod_rate,
+    'Eficiência da Máquina': future_machine_eff
+}
+
+df_future = pd.DataFrame(future_data)
+
+# Normalizar os dados futuros
+X_future = scaler.transform(df_future[['timestamp', 'SUSBTITUA AQUI PELOS DADOS INTERESSADOS', 'Temperatura externa', 'Taxa de Produção', 'Eficiência da Máquina']])
+
+# Fazer predições
+future_predictions = model.predict(X_future)
+
+# Cálculo da taxa de erro (MAE)
+mae = np.mean(np.abs(future_predictions.flatten() - 200))  # Comparar com a meta escolhida
+print(f"Taxa de erro (MAE): {mae:.2f}")
+
+# Identificar o melhor horário para ligar as máquinas em dias frios ou quentes
+# Considerando "frio" como temperaturas abaixo de 10 graus (Pode ser modificado)
+temperatura_limite = 10
+
+# Filtrar as temperaturas frias
+dias_frios = df_future[df_future['Temperatura externa'] < temperatura_limite]
+
+# Definir os horários de início e fim da produção
+inicio_producao = pd.to_datetime("00:00").time() #Substituir pelos horários dos dados coletados
+fim_producao = pd.to_datetime("00:00").time() #Substituir pelos horários dos dados coletados
+
+# Melhor horário para ligar?
+horarios_ligar = []
+
+for index, row in dias_frios.iterrows():
+    data_hora = pd.to_datetime(row['timestamp'], unit='s')
+    # Se o horário estiver dentro do intervalo de produção
+    if inicio_producao <= data_hora.time() <= fim_producao:
+
+        # Adiciona à lista se for um dia frio
+        horarios_ligar.append(data_hora)
+
+# Se houver horários válidos, escolher o mais próximo do início da produção
+if horarios_ligar:
+    melhor_horario_ligar = min(horarios_ligar)
+    print(f"Melhor horário para ligar as máquinas em dias frios: {melhor_horario_ligar.strftime('%H:%M')}")
+else:
+    print("Não há horários válidos para ligar as máquinas em dias frios dentro do intervalo de produção.")
+
+#Melhor horário para desligar as máquinas
+# Desligamos quando a previsão de produção é inferior à meta
+horarios_desligar = []
+
+for index, row in df_future.iterrows():
+    if row['timestamp'] in dias_frios['timestamp'].values:
+        data_hora = pd.to_datetime(row['timestamp'], unit='s')
+        if future_predictions[index] < 200:  # Previsão estiver abaixo da meta
+            horarios_desligar.append(data_hora)
+
+# Se houver horários válidos, escolher o mais próximo do fim da produção
+if horarios_desligar:
+    melhor_horario_desligar = max(horarios_desligar)
+    print(f"Melhor horário para desligar as máquinas: {melhor_horario_desligar.strftime('%H:%M')}")
+else:
+    print("Não há horários válidos para desligar as máquinas com previsão abaixo da meta.")
+
+# Visualizar as previsões
+plt.figure(figsize=(10, 6))
+plt.plot(future_dates, future_predictions, label='Previsão', marker='o')
+plt.axhline(y=200, color='r', linestyle='--', label='Meta')
+plt.title('Previsão da Produção com a Meta')
+plt.xlabel('Data e Hora')
+plt.ylabel('Produção Prevista')
+plt.xticks(rotation=45)
+plt.legend()
+plt.grid()
+plt.tight_layout()
+plt.show()
