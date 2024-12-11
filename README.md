@@ -25,7 +25,7 @@ O modelo retorna gráficos que indicam:
 Dados: O modelo pode ser adaptado para usar dados reais, ajustando as variáveis conforme as necessidades do seu projeto.
 Parâmetros: Ajuste as variáveis de temperatura, consumo e taxa de produção conforme os requisitos do seu cenário.
 
-#Contribuições
+# Contribuições
 Sinta-se à vontade para contribuir com melhorias ou adaptações no código. Se você tiver sugestões ou quiser personalizar a solução, basta fazer um fork e criar um pull request.
 
 Por fim, agradeço a leitura dos pontos citados. Espero que você esteja claro como usar.
