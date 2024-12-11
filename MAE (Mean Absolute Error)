@@ -1,0 +1,13 @@
+A taxa de erro pode ser calculado á cada RUN. 
+Cada atualização faz o modelo aprender mais e mais sobre os dados, dando previsões mais assertivas, diminuindo então a taxa de erro.
+
+A taxa de erro é nomeada como  *MAE (Mean Absolute Error)*. 
+A mesma faz a comparação dos dados e análisa os melhores horários para ínicio e fim de produção de uma máquina específica; 
+
+#Cálculo da taxa de erro (MAE)
+    mae = np.mean(np.abs(future_predictions.flatten() - 200))  # Comparar com a meta escolhida
+    print(f"Taxa de erro (MAE): {mae:.2f}")
+
+#Identificar o melhor horário para ligar as máquinas em dias frios ou quentes
+#Considerando "frio" como temperaturas abaixo de 10 graus (Pode ser modificado)
+    temperatura_limite = 10
