@@ -1,0 +1,37 @@
+Damos entrada no código com a Rede Neural.
+
+    model = tf.keras.Sequential([
+    tf.keras.layers.InputLayer(input_shape=(X_train.shape[1],)),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(32, activation='relu'),
+    tf.keras.layers.Dense(1)  # Saída única (previsão do valor próximo da meta)
+])
+
+
+A rede neural possui 2 camadas ocultas com 64 e 32 neurônios, utilizando a ativação ReLU.
+
+O modelo é treinado para prever a produção (próxima da meta) com base nas variáveis fornecidas:
+
+        X = df[['timestamp', 'SUSBTITUA AQUI PELOS DADOS INTERESSADOS', 'Temperatura externa', 'Taxa de Produção', 'Eficiência da Máquina']].values
+        y = df['Meta'].values
+
+Predição para as próximas horas: 
+
+1.Simula-se a geração de dados para as próximas horas, incluindo valores de consumo de energia, temperatura e outros parâmetros. 
+    
+      future_dates = pd.date_range(start=df['DataHora'].max() + pd.Timedelta(hours=1), periods=SUBSTITUIR PELA HORA DA PREDIÇÃO, freq='H')
+      future_timestamps = future_dates.map(lambda x: x.timestamp())
+# Os horários podem ser definidos conforme a necessidade.
+
+2.A rede neural faz previsões para esses novos dados:
+
+  future_data = {
+    'timestamp': future_timestamps,
+    'SUSBTITUA AQUI PELOS DADOS INTERESSADOS': future_energy,
+    'Temperatura externa': future_temp,
+    'Taxa de Produção': future_prod_rate,
+    'Eficiência da Máquina': future_machine_eff
+}
+
+df_future = pd.DataFrame(future_data)
+
