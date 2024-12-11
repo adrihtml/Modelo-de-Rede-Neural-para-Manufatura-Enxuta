@@ -13,3 +13,15 @@ Fazemos alguns ajustes aos dados para que o modelo possa trabalhar sem dificulda
 
 # Conversão de DataHora para *timestamp*.
 # Normalização dos dados com *MinMaxScaler* para que todos os valores fiquem na mesma escala.
+
+# Estrutura dos Dados
+O conjunto de dados utilizado para treinamento e previsões inclui:
+
+DataHora: Marca temporal das medições (ajustável conforme o período desejado).
+Consumo de Energia: Consumo de energia simulado ou real.
+Temperatura Externa: Temperatura externa simulada ou real.
+Taxa de Produção: Taxa de produção da fábrica (ajustável conforme necessário).
+Eficiência da Máquina: Eficiência das máquinas na produção (ajustável conforme o cenário).
+Meta: A meta de produção (ajustável conforme a necessidade do projeto).
+
+Os dados são pré-processados e normalizados para alimentar o modelo de rede neural.
