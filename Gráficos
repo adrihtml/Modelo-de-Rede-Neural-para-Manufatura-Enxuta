@@ -1,0 +1,17 @@
+Os gráficos gerados com as bibliotecas mencionadas mostram tanto os melhores horários quanto a previsão desses horários.
+Destacando também aqueles que não seriam ideais para as operações. 
+Eles ajudam a visualizar claramente quando é mais vantajoso ligar ou desligar as máquinas, com base nos dados e nas previsões obtidas.
+
+# Visualizar as previsões
+      plt.figure(figsize=(10, 6))
+      plt.plot(future_dates, future_predictions, label='Previsão', marker='o')
+      plt.axhline(y=200, color='r', linestyle='--', label='Meta')
+      plt.title('Previsão da Produção com a Meta')
+      plt.xlabel('Data e Hora')
+      plt.ylabel('Produção Prevista')
+      plt.xticks(rotation=45)
+      plt.legend()
+      plt.grid()
+      plt.tight_layout()
+      plt.show()
+
